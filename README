@@ -1,0 +1,25 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=605
+
+
+Features:
+
+o Dialog prompt for optional start number. (Default is actual line number.)
+
+o Column of numbers is right justified.
+
+
+Usage:
+
+o Must be called from visual mode (with a selection).
+
+o Required argument indicates mode, only "v" (visual) allowed.
+
+o Example mapping:
+
+    vmap <silent> <F12> :<C-u>call Cream_number_lines("v")
+
+
+This is one of many custom utilities and functions for gVim from the Cream project (http://cream.sourceforge.net), a configuration of Vim for those of us familiar with Apple and Windows software.
+
+
+
