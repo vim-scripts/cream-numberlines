@@ -22,9 +22,9 @@
 " Foundation,  Inc.,  59  Temple  Place  -  Suite  330,   Boston,   MA
 " 02111-1307, USA.
 " 
-" Updated: 2003-03-27
-" Version: 0.1
-" Source:  http://vim.sourceforge.net/scripts/script.php?script_id=538
+" Updated: 2003-03-27T14:17:34-0500
+" Version: 0.2
+" Source:  http://vim.sourceforge.net/scripts/script.php?script_id=605
 " Author:  Steve Hall  [ digitect@mindspring.com ]
 "
 " Installation:
@@ -58,19 +58,27 @@ function! Cream_number_lines(mode)
 	" force to digit (theoretical)
 	let startno = startno + 0
 
-	" calculate difference in line and starting number
-	if startno < line("'<")
-		let startdiff = startno - line("'<")
+	" first line ok an any position
+	let mypos1 = line("'<")
+	" don't use last line if end mark is in first column
+	if col("'>") == 1	
+		let mypos2 = line("'>") - 1
 	else
-		let startdiff = startno - line("'<")
+		let mypos2 = line("'>")
 	endif
+
+	" calculate difference in line and starting number
+	let startdiff = startno - line("'<")
 
 	" file's current number of lines
 	let maxlinelen = strlen(line('$')) + 0
 
 	" how large line numbers can be
 	let maxsize = maxlinelen
-	" require minimum of 3 columns
+    " require minimum of 3 columns (reduces amount of re-justification
+    " if user adds enough lines to bump up the width of the line
+    " number column; we're assuming any file will have at least 100
+    " lines)
 	if maxlinelen < 3
 		let maxlinelen = 3 + 0
 	endif
@@ -81,7 +89,7 @@ function! Cream_number_lines(mode)
 	endwhile
 
 	" add line numbers (regexp help by Stefan Roemer <roemer@in.tum.de>, 2003-03-27)
-	execute "'\<,'>s/^/\\=submatch(1) . " .
+	execute mypos1 . "," . mypos2 . "s/^/\\=submatch(1) . " .
 		\ "strpart('" . myspacer . "', 1, " . maxlinelen . " - strlen((line('.') + " . startdiff . "))) . " .
 		\ "(line('.') + " . startdiff . ") . ' '"
 
